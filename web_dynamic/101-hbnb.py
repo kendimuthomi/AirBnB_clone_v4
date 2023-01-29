@@ -25,7 +25,7 @@ def teardown_db(exception):
     storage.close()
 
 
-@app.route('/3-hbnb')
+@app.route('/101-hbnb')
 def hbnb_filters(the_id=None):
     """ request to custom template with states, cities & amentities """
     state_objs = storage.all('State').values()
@@ -34,7 +34,7 @@ def hbnb_filters(the_id=None):
     places = storage.all('Place').values()
     users = dict([user.id, "{} {}".format(user.first_name, user.last_name)]
                  for user in storage.all('User').values())
-    return render_template('3-hbnb.html',
+    return render_template('101-hbnb.html',
                            states=states,
                            amenities=amenities,
                            places=places,

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ Starts a Flash Web Application """
-from uuid import uuid4
 from models import storage
 from models.state import State
 from models.city import City
@@ -8,6 +7,8 @@ from models.amenity import Amenity
 from models.place import Place
 from os import environ
 from flask import Flask, render_template
+import uuid
+
 app = Flask(__name__)
 # app.jinja_env.trim_blocks = True
 # app.jinja_env.lstrip_blocks = True
@@ -19,8 +20,8 @@ def close_db(error):
     storage.close()
 
 
-@app.route('/2-hbnb', strict_slashes=False)
-def hbnb():
+@app.route('/100-hbnb', strict_slashes=False)
+def hbnb_filters(the_id=None):
     """ HBNB is alive! """
     states = storage.all(State).values()
     states = sorted(states, key=lambda k: k.name)
@@ -35,12 +36,16 @@ def hbnb():
     places = storage.all(Place).values()
     places = sorted(places, key=lambda k: k.name)
 
-    return render_template('2-hbnb.html',
+    users = dict([user.id, "{} {}".format(user.first_name, user.last_name)]
+                 for user in storage.all('User').values())
+
+    return render_template('100-hbnb.html',
                            states=st_ct,
                            amenities=amenities,
-                           places=places, cache_id=uuid4())
+                           places=places,
+                           users=users, cache_id=uuid.uuid())
 
 
 if __name__ == "__main__":
     """ Main Function """
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)web_dynamic/100-hbnb.py
